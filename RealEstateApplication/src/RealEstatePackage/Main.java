@@ -1,6 +1,7 @@
 package RealEstatePackage;
 
 import java.util.List;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args)
@@ -99,14 +100,32 @@ public class Main {
                     analyzer.areNoPropertiesBelowPrice(200000));
         };
 
+        Runnable mapAndPartitionProperties = () -> {
+            System.out.println("\nMapping and partitioning properties:");
+            Map<String, Property> propertyMap = analyzer.mapPropertiesByAddress();
+            System.out.println("Properties by address:");
+            propertyMap.forEach((address, prop) ->
+                    System.out.println(address + ": " + prop.getFullDetails()));
+
+            Map<Boolean, List<Property>> partitioned = analyzer.partitionPropertiesByType();
+            System.out.println("\nPartitioned by type (true=Residential, false=Commercial):");
+            partitioned.forEach((isResidential, props) -> {
+                System.out.println(isResidential ? "Residential:" : "Commercial:");
+                props.forEach(prop -> System.out.println("  " + prop.getFullDetails()));
+            });
+        };
 
         String[] actions = {"ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE",
                 "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES", "GET_DEFAULT_PROPERTY",
-                "PRINT_FORMATTED_PROPERTIES", "ANALYZE_PROPERTIES", "CHECK_PROPERTIES_STATUS"};
+                "PRINT_FORMATTED_PROPERTIES", "ANALYZE_PROPERTIES", "CHECK_PROPERTIES_STATUS"
+                ,"MAP_AND_PARTITION_PROPERTIES"};
 
-        for (var action : actions) {
-            try {
-                switch (action) {
+        for (var action : actions)
+        {
+            try
+            {
+                switch (action)
+                {
                     case "ADD_PROPERTY" -> addProperties.run();
                     case "LIST_PROPERTY" -> listProperties.run();
                     case "SEARCH_BY_ADDRESS" -> searchByAddress.run();
@@ -119,9 +138,12 @@ public class Main {
                     case "PRINT_FORMATTED_PROPERTIES" -> printFormattedProperties.run();
                     case "ANALYZE_PROPERTIES" -> analyzeProperties.run();
                     case "CHECK_PROPERTIES_STATUS" -> checkPropertiesStatus.run();
+                    case "MAP_AND_PARTITION_PROPERTIES" -> mapAndPartitionProperties.run();
                     default -> System.out.println("No action: " + action);
                 }
-            } catch (IllegalArgumentException | NullPointerException e) {
+            }
+            catch (IllegalArgumentException | NullPointerException e)
+            {
                 System.out.println("Error due to exception: " + e.getMessage());
             }
         }
