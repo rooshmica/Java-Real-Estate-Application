@@ -90,9 +90,19 @@ public class Main {
                     analyzer.findFirstProperty().map(Property::getFullDetails).orElse("None"));
         };
 
+        // Action: Check properties status using stream terminal operations
+        Runnable checkPropertiesStatus = () -> {
+            System.out.println("\nChecking properties status with terminal operations:");
+            System.out.println("Are all properties sold? " + analyzer.areAllPropertiesSold());
+            System.out.println("Is any property available? " + analyzer.isAnyPropertyAvailable());
+            System.out.println("Are no properties below $200000? " +
+                    analyzer.areNoPropertiesBelowPrice(200000));
+        };
+
+
         String[] actions = {"ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE",
                 "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES", "GET_DEFAULT_PROPERTY",
-                "PRINT_FORMATTED_PROPERTIES", "ANALYZE_PROPERTIES"};
+                "PRINT_FORMATTED_PROPERTIES", "ANALYZE_PROPERTIES", "CHECK_PROPERTIES_STATUS"};
 
         for (var action : actions) {
             try {
@@ -108,6 +118,7 @@ public class Main {
                     case "GET_DEFAULT_PROPERTY" -> getDefaultProperty.run();
                     case "PRINT_FORMATTED_PROPERTIES" -> printFormattedProperties.run();
                     case "ANALYZE_PROPERTIES" -> analyzeProperties.run();
+                    case "CHECK_PROPERTIES_STATUS" -> checkPropertiesStatus.run();
                     default -> System.out.println("No action: " + action);
                 }
             } catch (IllegalArgumentException | NullPointerException e) {
