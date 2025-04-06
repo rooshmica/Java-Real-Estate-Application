@@ -77,7 +77,10 @@ public class Main {
             System.out.println("Default or first property: " + defaultProperty.getFullDetails());
         };
 
-        String[] actions = {"ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE", "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES", "GET_DEFAULT_PROPERTY"};
+        // Action: Print formatted properties using Function lambda
+        Runnable printFormattedProperties = analyzer::printFormattedProperties;
+
+        String[] actions = {"ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE", "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES", "GET_DEFAULT_PROPERTY", "PRINT_FORMATTED_PROPERTIES"};
 
         for (var action : actions) {
             try {
@@ -91,6 +94,7 @@ public class Main {
                     case "REMOVE_PROPERTY" -> removeProperty.run();
                     case "LOG_PROPERTIES" -> logProperties.run();
                     case "GET_DEFAULT_PROPERTY" -> getDefaultProperty.run();
+                    case "PRINT_FORMATTED_PROPERTIES" -> printFormattedProperties.run();
                     default -> System.out.println("No action: " + action);
                 }
             } catch (IllegalArgumentException | NullPointerException e) {
