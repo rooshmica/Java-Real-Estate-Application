@@ -113,41 +113,27 @@ public class PropertyManager
         }
     }
 
-    public List<Property> searchProperty(double minPrice, double maxPrice)
-    {
+    public List<Property> searchProperty(double minPrice, double maxPrice) {
         List<Property> result = new ArrayList<>();
-
-        try
-        {
-            if (minPrice < 0 || maxPrice < 0)
-            {
+        try {
+            if (minPrice < 0 || maxPrice < 0) {
                 throw new IllegalArgumentException("Price values cannot be negative and it should be greater than zero.");
             }
-            if (minPrice > maxPrice)
-            {
+            if (minPrice > maxPrice) {
                 throw new IllegalArgumentException("Min price cannot be greater than max price.");
             }
-
             Predicate<Property> priceInRange = property -> property.getPrice() >= minPrice && property.getPrice() <= maxPrice;
-
-            for (Property property : properties)
-            {
-                if (priceInRange.test(property))
-                {
+            for (Property property : properties) {
+                if (priceInRange.test(property)) {
                     result.add(property);
                 }
             }
-
-            if (result.isEmpty())
-            {
+            if (result.isEmpty()) {
                 throw new IllegalStateException("No properties found within the given price range.");
             }
-        }
-        catch (IllegalArgumentException | IllegalStateException e)
-        {
+        } catch (IllegalArgumentException | IllegalStateException e) {
             System.out.println("Error in searchProperty(): " + e.getMessage());
         }
-
         return result;
     }
 
