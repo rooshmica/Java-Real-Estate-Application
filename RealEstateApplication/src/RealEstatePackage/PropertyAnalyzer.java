@@ -9,13 +9,19 @@ public class PropertyAnalyzer {
         this.manager = manager;
     }
 
-    public void logProperties() {
-        Consumer<Property> propertyLogger = property ->
-                System.out.println("LOG: [Address: " + property.getFullAddress() +
-                        ", Price: $" + property.getPrice() +
-                        ", Status: " + property.getStatus() + "]");
+    public void logProperties()
+    {
+        Consumer<Property> propertyLogger = property -> System.out.println("LOG: [Address: " + property.getFullAddress() +
+                        ", Price: $" + property.getPrice() + ", Status: " + property.getStatus() + "]");
 
         System.out.println("\nLogging all properties with Consumer:");
         manager.getProperties().forEach(propertyLogger);
+    }
+
+    public Property getDefaultPropertyIfEmpty()
+    {
+        Supplier<Property> defaultPropertySupplier = () -> new ResidentialProperty("Default Address", 100000, 2);
+        List<Property> properties = manager.getProperties();
+        return properties.isEmpty() ? defaultPropertySupplier.get() : properties.get(0);
     }
 }

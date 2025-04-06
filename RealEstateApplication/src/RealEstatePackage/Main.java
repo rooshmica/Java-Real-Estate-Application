@@ -71,7 +71,13 @@ public class Main {
         PropertyAnalyzer analyzer = new PropertyAnalyzer(manager);
         Runnable logProperties = analyzer::logProperties;
 
-        String[] actions = {"ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE", "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES"};
+        Runnable getDefaultProperty = () -> {
+            System.out.println("\nGetting default property if list is empty:");
+            Property defaultProperty = analyzer.getDefaultPropertyIfEmpty();
+            System.out.println("Default or first property: " + defaultProperty.getFullDetails());
+        };
+
+        String[] actions = {"ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE", "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES", "GET_DEFAULT_PROPERTY"};
 
         for (var action : actions) {
             try {
@@ -84,6 +90,7 @@ public class Main {
                     case "UPDATE_STATUS" -> updateStatus.run();
                     case "REMOVE_PROPERTY" -> removeProperty.run();
                     case "LOG_PROPERTIES" -> logProperties.run();
+                    case "GET_DEFAULT_PROPERTY" -> getDefaultProperty.run();
                     default -> System.out.println("No action: " + action);
                 }
             } catch (IllegalArgumentException | NullPointerException e) {
