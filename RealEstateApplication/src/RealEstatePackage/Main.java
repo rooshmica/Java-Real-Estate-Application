@@ -68,7 +68,10 @@ public class Main {
             manager.listAllProperties();
         };
 
-        String[] actions = {"ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE", "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY"};
+        PropertyAnalyzer analyzer = new PropertyAnalyzer(manager);
+        Runnable logProperties = analyzer::logProperties;
+
+        String[] actions = {"ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE", "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES"};
 
         for (var action : actions) {
             try {
@@ -80,6 +83,7 @@ public class Main {
                     case "UPDATE_PROPERTY" -> updateProperty.run();
                     case "UPDATE_STATUS" -> updateStatus.run();
                     case "REMOVE_PROPERTY" -> removeProperty.run();
+                    case "LOG_PROPERTIES" -> logProperties.run();
                     default -> System.out.println("No action: " + action);
                 }
             } catch (IllegalArgumentException | NullPointerException e) {

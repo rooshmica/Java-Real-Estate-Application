@@ -156,4 +156,9 @@ public class PropertyManager
         }
     }
 
+    // New method to return a defensive copy of the properties list
+    public List<Property> getProperties() {
+        return new ArrayList<>(properties);
+    }
+
 }
