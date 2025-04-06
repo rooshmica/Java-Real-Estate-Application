@@ -2,9 +2,10 @@ package RealEstatePackage;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.function.Function; // Import for Function
+import java.util.function.Function;
 
 public class PropertyAnalyzer {
     private final PropertyManager manager;
@@ -31,7 +32,6 @@ public class PropertyAnalyzer {
         }
     }
 
-    // Concept: Lambda (Function) - Transform Property to a custom string format
     public void printFormattedProperties() {
         Function<Property, String> propertyFormatter = property ->
                 "Formatted: " + property.getFullAddress() + " - $" + property.getPrice();
@@ -40,5 +40,19 @@ public class PropertyAnalyzer {
         manager.getProperties().stream()
                 .map(propertyFormatter)
                 .forEach(System.out::println);
+    }
+
+    public long countProperties() {
+        return manager.getProperties().stream().count();
+    }
+
+    // Concept: Stream Terminal Operation (findAny) - Find any property
+    public Optional<Property> findAnyProperty() {
+        return manager.getProperties().stream().findAny();
+    }
+
+    // Concept: Stream Terminal Operation (findFirst) - Find the first property
+    public Optional<Property> findFirstProperty() {
+        return manager.getProperties().stream().findFirst();
     }
 }

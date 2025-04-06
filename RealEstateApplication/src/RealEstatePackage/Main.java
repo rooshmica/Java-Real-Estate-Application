@@ -80,7 +80,19 @@ public class Main {
         // Action: Print formatted properties using Function lambda
         Runnable printFormattedProperties = analyzer::printFormattedProperties;
 
-        String[] actions = {"ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE", "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES", "GET_DEFAULT_PROPERTY", "PRINT_FORMATTED_PROPERTIES"};
+        // Action: Analyze properties using stream terminal operations
+        Runnable analyzeProperties = () -> {
+            System.out.println("\nAnalyzing properties with terminal operations:");
+            System.out.println("Total properties: " + analyzer.countProperties());
+            System.out.println("Any property: " +
+                    analyzer.findAnyProperty().map(Property::getFullDetails).orElse("None"));
+            System.out.println("First property: " +
+                    analyzer.findFirstProperty().map(Property::getFullDetails).orElse("None"));
+        };
+
+        String[] actions = {"ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE",
+                "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES", "GET_DEFAULT_PROPERTY",
+                "PRINT_FORMATTED_PROPERTIES", "ANALYZE_PROPERTIES"};
 
         for (var action : actions) {
             try {
@@ -95,6 +107,7 @@ public class Main {
                     case "LOG_PROPERTIES" -> logProperties.run();
                     case "GET_DEFAULT_PROPERTY" -> getDefaultProperty.run();
                     case "PRINT_FORMATTED_PROPERTIES" -> printFormattedProperties.run();
+                    case "ANALYZE_PROPERTIES" -> analyzeProperties.run();
                     default -> System.out.println("No action: " + action);
                 }
             } catch (IllegalArgumentException | NullPointerException e) {
