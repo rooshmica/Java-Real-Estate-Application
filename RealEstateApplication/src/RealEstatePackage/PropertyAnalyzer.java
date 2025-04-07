@@ -1,5 +1,6 @@
 package RealEstatePackage;
 
+import java.util.Comparator; // Import for Comparator
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -7,7 +8,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.function.Function;
-import java.util.stream.Collectors; // Import for Collectors
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class PropertyAnalyzer {
     private final PropertyManager manager;
@@ -71,17 +73,15 @@ public class PropertyAnalyzer {
                 .noneMatch(property -> property.getPrice() < price);
     }
 
-    // Concept: Stream Terminal Operation (collect with Collectors.toMap) - Map properties by address
     public Map<String, Property> mapPropertiesByAddress() {
         return manager.getProperties().stream()
                 .collect(Collectors.toMap(
                         Property::getFullAddress,
                         property -> property,
-                        (p1, p2) -> p1 // Handle duplicate addresses by keeping the first
+                        (p1, p2) -> p1
                 ));
     }
 
-    // Concept: Stream Terminal Operation (collect with Collectors.partitioningBy) - Partition by type
     public Map<Boolean, List<Property>> partitionPropertiesByType() {
         return manager.getProperties().stream()
                 .collect(Collectors.partitioningBy(
@@ -89,13 +89,28 @@ public class PropertyAnalyzer {
                 ));
     }
 
-    // Concept: Stream Intermediate Operations (distinct, limit, map) - Get limited distinct properties by price
     public List<String> getLimitedDistinctAddressesByPrice(int limit) {
         return manager.getProperties().stream()
                 .distinct()
                 .sorted((p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()))
                 .limit(limit)
                 .map(Property::getFullAddress)
+                .collect(Collectors.toList());
+    }
+
+    public List<Property> filterPropertiesByCondition(double minPrice, PropertyStatus status) {
+        Predicate<Property> condition = property ->
+                property.getPrice() >= minPrice && property.getStatus() == status;
+
+        return manager.getProperties().stream()
+                .filter(condition)
+                .collect(Collectors.toList());
+    }
+
+    // Concept: Collections/Generics - Sort properties using Comparator.comparing()
+    public List<Property> sortPropertiesByPrice() {
+        return manager.getProperties().stream()
+                .sorted(Comparator.comparing(Property::getPrice))
                 .collect(Collectors.toList());
     }
 }

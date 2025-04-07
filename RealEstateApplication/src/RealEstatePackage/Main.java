@@ -122,11 +122,18 @@ public class Main {
             addresses.forEach(System.out::println);
         };
 
+        // Action: Sort properties using Comparator.comparing()
+        Runnable sortPropertiesByPrice = () -> {
+            System.out.println("\nSorting properties by price using Comparator.comparing():");
+            List<Property> sortedProperties = analyzer.sortPropertiesByPrice();
+            sortedProperties.forEach(property -> System.out.println(property.getFullDetails()));
+        };
+
 
         String[] actions = {"ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE",
                 "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES", "GET_DEFAULT_PROPERTY",
                 "PRINT_FORMATTED_PROPERTIES", "ANALYZE_PROPERTIES", "CHECK_PROPERTIES_STATUS"
-                ,"MAP_AND_PARTITION_PROPERTIES", "GET_LIMITED_DISTINCT_ADDRESSES"};
+                ,"MAP_AND_PARTITION_PROPERTIES", "GET_LIMITED_DISTINCT_ADDRESSES","SORT_PROPERTIES_BY_PRICE"};
 
         for (var action : actions)
         {
@@ -148,6 +155,7 @@ public class Main {
                     case "CHECK_PROPERTIES_STATUS" -> checkPropertiesStatus.run();
                     case "MAP_AND_PARTITION_PROPERTIES" -> mapAndPartitionProperties.run();
                     case "GET_LIMITED_DISTINCT_ADDRESSES" -> getLimitedDistinctAddresses.run();
+                    case "SORT_PROPERTIES_BY_PRICE" -> sortPropertiesByPrice.run();
                     default -> System.out.println("No action: " + action);
                 }
             }
