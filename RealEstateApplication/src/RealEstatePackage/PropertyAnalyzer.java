@@ -1,10 +1,14 @@
 package RealEstatePackage;
 
-import java.util.Comparator; // Import for Comparator
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.concurrent.Callable; // Import for Callable
+import java.util.concurrent.ExecutorService; // Import for ExecutorService
+import java.util.concurrent.Executors; // Import for Executors
+import java.util.concurrent.Future; // Import for Future
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.function.Function;
@@ -107,10 +111,39 @@ public class PropertyAnalyzer {
                 .collect(Collectors.toList());
     }
 
-    // Concept: Collections/Generics - Sort properties using Comparator.comparing()
     public List<Property> sortPropertiesByPrice() {
         return manager.getProperties().stream()
                 .sorted(Comparator.comparing(Property::getPrice))
                 .collect(Collectors.toList());
+    }
+
+    // Concept: Concurrency - Calculate total price using ExecutorService
+    public double calculateTotalPriceConcurrently() throws Exception {
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        try {
+            List<Callable<Double>> tasks = List.of(
+                    () -> manager.getProperties().stream()
+                            .filter(p -> p instanceof ResidentialProperty)
+                            .mapToDouble(Property::getPrice)
+                            .sum(),
+                    () -> manager.getProperties().stream()
+                            .filter(p -> p instanceof CommercialProperty)
+                            .mapToDouble(Property::getPrice)
+                            .sum()
+            );
+
+            List<Future<Double>> results = executor.invokeAll(tasks);
+            return results.stream()
+                    .mapToDouble(future -> {
+                        try {
+                            return future.get();
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .sum();
+        } finally {
+            executor.shutdown();
+        }
     }
 }

@@ -129,11 +129,23 @@ public class Main {
             sortedProperties.forEach(property -> System.out.println(property.getFullDetails()));
         };
 
+        // Action: Calculate total price concurrently using ExecutorService
+        Runnable calculateTotalPriceConcurrently = () -> {
+            System.out.println("\nCalculating total price concurrently using ExecutorService:");
+            try {
+                double totalPrice = analyzer.calculateTotalPriceConcurrently();
+                System.out.println("Total price: $" + totalPrice);
+            } catch (Exception e) {
+                System.out.println("Error during concurrent calculation: " + e.getMessage());
+            }
+        };
+
 
         String[] actions = {"ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE",
                 "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES", "GET_DEFAULT_PROPERTY",
                 "PRINT_FORMATTED_PROPERTIES", "ANALYZE_PROPERTIES", "CHECK_PROPERTIES_STATUS"
-                ,"MAP_AND_PARTITION_PROPERTIES", "GET_LIMITED_DISTINCT_ADDRESSES","SORT_PROPERTIES_BY_PRICE"};
+                ,"MAP_AND_PARTITION_PROPERTIES", "GET_LIMITED_DISTINCT_ADDRESSES","SORT_PROPERTIES_BY_PRICE"
+                , "CALCULATE_TOTAL_PRICE_CONCURRENTLY"};
 
         for (var action : actions)
         {
@@ -156,6 +168,7 @@ public class Main {
                     case "MAP_AND_PARTITION_PROPERTIES" -> mapAndPartitionProperties.run();
                     case "GET_LIMITED_DISTINCT_ADDRESSES" -> getLimitedDistinctAddresses.run();
                     case "SORT_PROPERTIES_BY_PRICE" -> sortPropertiesByPrice.run();
+                    case "CALCULATE_TOTAL_PRICE_CONCURRENTLY" -> calculateTotalPriceConcurrently.run();
                     default -> System.out.println("No action: " + action);
                 }
             }
