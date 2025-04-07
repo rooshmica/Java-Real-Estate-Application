@@ -1,14 +1,17 @@
 package RealEstatePackage;
 
+import java.io.IOException; // Import for IOException
+import java.nio.file.Files; // Import for Files
+import java.nio.file.Path; // Import for Path
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.concurrent.Callable; // Import for Callable
-import java.util.concurrent.ExecutorService; // Import for ExecutorService
-import java.util.concurrent.Executors; // Import for Executors
-import java.util.concurrent.Future; // Import for Future
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.function.Function;
@@ -117,7 +120,6 @@ public class PropertyAnalyzer {
                 .collect(Collectors.toList());
     }
 
-    // Concept: Concurrency - Calculate total price using ExecutorService
     public double calculateTotalPriceConcurrently() throws Exception {
         ExecutorService executor = Executors.newFixedThreadPool(2);
         try {
@@ -145,5 +147,13 @@ public class PropertyAnalyzer {
         } finally {
             executor.shutdown();
         }
+    }
+
+    // Concept: NIO2 - Save property details to a file
+    public void savePropertiesToFile(String filePath) throws IOException {
+        List<String> propertyDetails = manager.getProperties().stream()
+                .map(Property::getFullDetails)
+                .toList();
+        Files.write(Path.of(filePath), propertyDetails);
     }
 }

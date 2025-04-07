@@ -1,0 +1,2 @@
+Address: 123 Main St, Price: $275000.0, Status: SOLD, Bedrooms: 3
+Address: 789 Pine St, Price: $350000.0, Status: AVAILABLE, Bedrooms: 4

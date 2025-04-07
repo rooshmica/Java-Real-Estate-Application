@@ -1,5 +1,6 @@
 package RealEstatePackage;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -140,12 +141,22 @@ public class Main {
             }
         };
 
+        // Action: Save properties to file using NIO2
+        Runnable savePropertiesToFileNIO2 = () -> {
+            System.out.println("\nSaving properties to file using NIO2:");
+            try {
+                analyzer.savePropertiesToFile("properties.txt");
+                System.out.println("Properties saved to properties.txt");
+            } catch (IOException e) {
+                System.out.println("Error saving properties: " + e.getMessage());
+            }
+        };
 
         String[] actions = {"ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE",
                 "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES", "GET_DEFAULT_PROPERTY",
                 "PRINT_FORMATTED_PROPERTIES", "ANALYZE_PROPERTIES", "CHECK_PROPERTIES_STATUS"
                 ,"MAP_AND_PARTITION_PROPERTIES", "GET_LIMITED_DISTINCT_ADDRESSES","SORT_PROPERTIES_BY_PRICE"
-                , "CALCULATE_TOTAL_PRICE_CONCURRENTLY"};
+                , "CALCULATE_TOTAL_PRICE_CONCURRENTLY","SAVE_PROPERTIES_TO_FILE_NIO2"};
 
         for (var action : actions)
         {
@@ -169,6 +180,7 @@ public class Main {
                     case "GET_LIMITED_DISTINCT_ADDRESSES" -> getLimitedDistinctAddresses.run();
                     case "SORT_PROPERTIES_BY_PRICE" -> sortPropertiesByPrice.run();
                     case "CALCULATE_TOTAL_PRICE_CONCURRENTLY" -> calculateTotalPriceConcurrently.run();
+                    case "SAVE_PROPERTIES_TO_FILE_NIO2" -> savePropertiesToFileNIO2.run();
                     default -> System.out.println("No action: " + action);
                 }
             }
