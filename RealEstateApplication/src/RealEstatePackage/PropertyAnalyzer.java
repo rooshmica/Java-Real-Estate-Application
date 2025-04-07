@@ -88,4 +88,14 @@ public class PropertyAnalyzer {
                         property -> property instanceof ResidentialProperty
                 ));
     }
+
+    // Concept: Stream Intermediate Operations (distinct, limit, map) - Get limited distinct properties by price
+    public List<String> getLimitedDistinctAddressesByPrice(int limit) {
+        return manager.getProperties().stream()
+                .distinct()
+                .sorted((p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()))
+                .limit(limit)
+                .map(Property::getFullAddress)
+                .collect(Collectors.toList());
+    }
 }

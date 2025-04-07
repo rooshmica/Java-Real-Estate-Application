@@ -115,10 +115,18 @@ public class Main {
             });
         };
 
+        // Action: Get limited distinct addresses
+        Runnable getLimitedDistinctAddresses = () -> {
+            System.out.println("\nGetting limited distinct addresses (limit 2):");
+            List<String> addresses = analyzer.getLimitedDistinctAddressesByPrice(2);
+            addresses.forEach(System.out::println);
+        };
+
+
         String[] actions = {"ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE",
                 "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES", "GET_DEFAULT_PROPERTY",
                 "PRINT_FORMATTED_PROPERTIES", "ANALYZE_PROPERTIES", "CHECK_PROPERTIES_STATUS"
-                ,"MAP_AND_PARTITION_PROPERTIES"};
+                ,"MAP_AND_PARTITION_PROPERTIES", "GET_LIMITED_DISTINCT_ADDRESSES"};
 
         for (var action : actions)
         {
@@ -139,6 +147,7 @@ public class Main {
                     case "ANALYZE_PROPERTIES" -> analyzeProperties.run();
                     case "CHECK_PROPERTIES_STATUS" -> checkPropertiesStatus.run();
                     case "MAP_AND_PARTITION_PROPERTIES" -> mapAndPartitionProperties.run();
+                    case "GET_LIMITED_DISTINCT_ADDRESSES" -> getLimitedDistinctAddresses.run();
                     default -> System.out.println("No action: " + action);
                 }
             }
