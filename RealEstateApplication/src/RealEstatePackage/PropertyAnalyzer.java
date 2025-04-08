@@ -169,15 +169,19 @@ public class PropertyAnalyzer {
         });
     }
 
-    // Concept: Streams - Use min() to find the cheapest property
     public Optional<Property> findCheapestProperty() {
         return manager.getProperties().stream()
                 .min(Comparator.comparing(Property::getPrice));
     }
 
-    // Concept: Streams - Use max() to find the most expensive property
     public Optional<Property> findMostExpensiveProperty() {
         return manager.getProperties().stream()
                 .max(Comparator.comparing(Property::getPrice));
+    }
+
+    // Concept: Streams - Group properties by status using Collectors.groupingBy()
+    public Map<PropertyStatus, List<Property>> groupPropertiesByStatus() {
+        return manager.getProperties().stream()
+                .collect(Collectors.groupingBy(Property::getStatus));
     }
 }

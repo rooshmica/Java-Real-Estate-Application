@@ -152,7 +152,6 @@ public class Main {
             analyzer.displayPropertiesInLocale(Locale.FRANCE);
         };
 
-        // Action: Find cheapest and most expensive properties using min() and max()
         Runnable findCheapestAndMostExpensive = () -> {
             System.out.println("\nFinding cheapest property using min():");
             analyzer.findCheapestProperty()
@@ -169,6 +168,16 @@ public class Main {
                     );
         };
 
+        // Action: Group properties by status using Collectors.groupingBy()
+        Runnable groupPropertiesByStatus = () -> {
+            System.out.println("\nGrouping properties by status using Collectors.groupingBy():");
+            Map<PropertyStatus, List<Property>> grouped = analyzer.groupPropertiesByStatus();
+            grouped.forEach((status, props) -> {
+                System.out.println(status + ":");
+                props.forEach(prop -> System.out.println("  " + prop.getFullDetails()));
+            });
+        };
+
         String[] actions = {
                 "ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE",
                 "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES",
@@ -176,7 +185,8 @@ public class Main {
                 "CHECK_PROPERTIES_STATUS", "MAP_AND_PARTITION_PROPERTIES",
                 "GET_LIMITED_DISTINCT_ADDRESSES", "SORT_PROPERTIES_BY_PRICE",
                 "CALCULATE_TOTAL_PRICE_CONCURRENTLY", "SAVE_PROPERTIES_TO_FILE_NIO2",
-                "DISPLAY_PROPERTIES_IN_LOCALE", "FIND_CHEAPEST_AND_MOST_EXPENSIVE"
+                "DISPLAY_PROPERTIES_IN_LOCALE", "FIND_CHEAPEST_AND_MOST_EXPENSIVE",
+                "GROUP_PROPERTIES_BY_STATUS"
         };
 
         for (var action : actions) {
@@ -201,6 +211,7 @@ public class Main {
                     case "SAVE_PROPERTIES_TO_FILE_NIO2" -> savePropertiesToFileNIO2.run();
                     case "DISPLAY_PROPERTIES_IN_LOCALE" -> displayPropertiesInLocale.run();
                     case "FIND_CHEAPEST_AND_MOST_EXPENSIVE" -> findCheapestAndMostExpensive.run();
+                    case "GROUP_PROPERTIES_BY_STATUS" -> groupPropertiesByStatus.run();
                     default -> System.out.println("No action: " + action);
                 }
             } catch (IllegalArgumentException | NullPointerException e) {
