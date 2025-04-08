@@ -177,6 +177,11 @@ public class Main {
             });
         };
 
+        Runnable countPropertiesWithUnnamedVariable = () -> {
+            System.out.println("\nCounting properties using unnamed variable:");
+            System.out.println("Total properties: " + analyzer.countPropertiesWithUnnamedVariable());
+        };
+
         String[] actions = {
                 "ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE",
                 "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES",
@@ -185,12 +190,11 @@ public class Main {
                 "GET_LIMITED_DISTINCT_ADDRESSES", "SORT_PROPERTIES_BY_PRICE",
                 "CALCULATE_TOTAL_PRICE_CONCURRENTLY", "SAVE_PROPERTIES_TO_FILE_NIO2",
                 "DISPLAY_PROPERTIES_IN_LOCALE", "FIND_CHEAPEST_AND_MOST_EXPENSIVE",
-                "GROUP_PROPERTIES_BY_STATUS"
+                "GROUP_PROPERTIES_BY_STATUS", "COUNT_PROPERTIES_WITH_UNNAMED_VARIABLE"
         };
 
         for (var action : actions) {
             try {
-                // Concept: Switch Expression - Refactor switch statement to use switch expression
                 Runnable task = switch (action) {
                     case "ADD_PROPERTY" -> addProperties;
                     case "LIST_PROPERTY" -> listProperties;
@@ -212,6 +216,7 @@ public class Main {
                     case "DISPLAY_PROPERTIES_IN_LOCALE" -> displayPropertiesInLocale;
                     case "FIND_CHEAPEST_AND_MOST_EXPENSIVE" -> findCheapestAndMostExpensive;
                     case "GROUP_PROPERTIES_BY_STATUS" -> groupPropertiesByStatus;
+                    case "COUNT_PROPERTIES_WITH_UNNAMED_VARIABLE" -> countPropertiesWithUnnamedVariable;
                     default -> () -> System.out.println("No action: " + action);
                 };
                 task.run();

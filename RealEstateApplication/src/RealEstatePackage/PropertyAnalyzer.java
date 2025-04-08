@@ -40,7 +40,7 @@ public class PropertyAnalyzer {
         try {
             return manager.getProperties().getFirst();
         } catch (NoSuchElementException e) {
-            return ((Supplier<Property>) () -> new ResidentialProperty("Default Address", 100000, 2)).get();
+            return new ResidentialProperty("Default Address", 100000, 2);
         }
     }
 
@@ -55,7 +55,7 @@ public class PropertyAnalyzer {
     }
 
     public long countProperties() {
-        return manager.getProperties().stream().count();
+        return manager.getProperties().size();
     }
 
     public Optional<Property> findAnyProperty() {
@@ -90,7 +90,6 @@ public class PropertyAnalyzer {
                 ));
     }
 
-    // Concept: Pattern Matching - Use instanceof pattern matching
     public Map<Boolean, List<Property>> partitionPropertiesByType() {
         return manager.getProperties().stream()
                 .collect(Collectors.partitioningBy(
@@ -100,12 +99,16 @@ public class PropertyAnalyzer {
 
     public List<String> getLimitedDistinctAddressesByPrice(int limit) {
         return manager.getProperties().stream()
-                .distinct().sorted((p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()))
-                .limit(limit).map(Property::getFullAddress).collect(Collectors.toList());
+                .distinct()
+                .sorted((p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()))
+                .limit(limit)
+                .map(Property::getFullAddress)
+                .collect(Collectors.toList());
     }
 
     public List<Property> filterPropertiesByCondition(double minPrice, PropertyStatus status) {
-        Predicate<Property> condition = property -> property.getPrice() >= minPrice && property.getStatus() == status;
+        Predicate<Property> condition = property ->
+                property.getPrice() >= minPrice && property.getStatus() == status;
 
         return manager.getProperties().stream()
                 .filter(condition)
@@ -123,8 +126,13 @@ public class PropertyAnalyzer {
         try {
             List<Callable<Double>> tasks = List.of(
                     () -> manager.getProperties().stream()
-                            .filter(p -> p instanceof ResidentialProperty).mapToDouble(Property::getPrice).sum(),
-                    () -> manager.getProperties().stream().filter(p -> p instanceof CommercialProperty).mapToDouble(Property::getPrice).sum()
+                            .filter(p -> p instanceof ResidentialProperty)
+                            .mapToDouble(Property::getPrice)
+                            .sum(),
+                    () -> manager.getProperties().stream()
+                            .filter(p -> p instanceof CommercialProperty)
+                            .mapToDouble(Property::getPrice)
+                            .sum()
             );
 
             List<Future<Double>> results = executor.invokeAll(tasks);
@@ -174,5 +182,12 @@ public class PropertyAnalyzer {
     public Map<PropertyStatus, List<Property>> groupPropertiesByStatus() {
         return manager.getProperties().stream()
                 .collect(Collectors.groupingBy(Property::getStatus));
+    }
+
+    // Concept: Java 22 Unnamed Variable - Use _ when the variable is not referenced
+    public long countPropertiesWithUnnamedVariable() {
+        return manager.getProperties().stream()
+                .filter(_ -> true) // _ is not referenced, just a placeholder
+                .count();
     }
 }
