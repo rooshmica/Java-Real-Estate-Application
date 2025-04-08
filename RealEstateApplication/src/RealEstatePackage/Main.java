@@ -168,7 +168,6 @@ public class Main {
                     );
         };
 
-        // Action: Group properties by status using Collectors.groupingBy()
         Runnable groupPropertiesByStatus = () -> {
             System.out.println("\nGrouping properties by status using Collectors.groupingBy():");
             Map<PropertyStatus, List<Property>> grouped = analyzer.groupPropertiesByStatus();
@@ -191,29 +190,31 @@ public class Main {
 
         for (var action : actions) {
             try {
-                switch (action) {
-                    case "ADD_PROPERTY" -> addProperties.run();
-                    case "LIST_PROPERTY" -> listProperties.run();
-                    case "SEARCH_BY_ADDRESS" -> searchByAddress.run();
-                    case "SEARCH_BY_PRICE" -> searchByPrice.run();
-                    case "UPDATE_PROPERTY" -> updateProperty.run();
-                    case "UPDATE_STATUS" -> updateStatus.run();
-                    case "REMOVE_PROPERTY" -> removeProperty.run();
-                    case "LOG_PROPERTIES" -> logProperties.run();
-                    case "GET_DEFAULT_PROPERTY" -> getDefaultProperty.run();
-                    case "PRINT_FORMATTED_PROPERTIES" -> printFormattedProperties.run();
-                    case "ANALYZE_PROPERTIES" -> analyzeProperties.run();
-                    case "CHECK_PROPERTIES_STATUS" -> checkPropertiesStatus.run();
-                    case "MAP_AND_PARTITION_PROPERTIES" -> mapAndPartitionProperties.run();
-                    case "GET_LIMITED_DISTINCT_ADDRESSES" -> getLimitedDistinctAddresses.run();
-                    case "SORT_PROPERTIES_BY_PRICE" -> sortPropertiesByPrice.run();
-                    case "CALCULATE_TOTAL_PRICE_CONCURRENTLY" -> calculateTotalPriceConcurrently.run();
-                    case "SAVE_PROPERTIES_TO_FILE_NIO2" -> savePropertiesToFileNIO2.run();
-                    case "DISPLAY_PROPERTIES_IN_LOCALE" -> displayPropertiesInLocale.run();
-                    case "FIND_CHEAPEST_AND_MOST_EXPENSIVE" -> findCheapestAndMostExpensive.run();
-                    case "GROUP_PROPERTIES_BY_STATUS" -> groupPropertiesByStatus.run();
-                    default -> System.out.println("No action: " + action);
-                }
+                // Concept: Switch Expression - Refactor switch statement to use switch expression
+                Runnable task = switch (action) {
+                    case "ADD_PROPERTY" -> addProperties;
+                    case "LIST_PROPERTY" -> listProperties;
+                    case "SEARCH_BY_ADDRESS" -> searchByAddress;
+                    case "SEARCH_BY_PRICE" -> searchByPrice;
+                    case "UPDATE_PROPERTY" -> updateProperty;
+                    case "UPDATE_STATUS" -> updateStatus;
+                    case "REMOVE_PROPERTY" -> removeProperty;
+                    case "LOG_PROPERTIES" -> logProperties;
+                    case "GET_DEFAULT_PROPERTY" -> getDefaultProperty;
+                    case "PRINT_FORMATTED_PROPERTIES" -> printFormattedProperties;
+                    case "ANALYZE_PROPERTIES" -> analyzeProperties;
+                    case "CHECK_PROPERTIES_STATUS" -> checkPropertiesStatus;
+                    case "MAP_AND_PARTITION_PROPERTIES" -> mapAndPartitionProperties;
+                    case "GET_LIMITED_DISTINCT_ADDRESSES" -> getLimitedDistinctAddresses;
+                    case "SORT_PROPERTIES_BY_PRICE" -> sortPropertiesByPrice;
+                    case "CALCULATE_TOTAL_PRICE_CONCURRENTLY" -> calculateTotalPriceConcurrently;
+                    case "SAVE_PROPERTIES_TO_FILE_NIO2" -> savePropertiesToFileNIO2;
+                    case "DISPLAY_PROPERTIES_IN_LOCALE" -> displayPropertiesInLocale;
+                    case "FIND_CHEAPEST_AND_MOST_EXPENSIVE" -> findCheapestAndMostExpensive;
+                    case "GROUP_PROPERTIES_BY_STATUS" -> groupPropertiesByStatus;
+                    default -> () -> System.out.println("No action: " + action);
+                };
+                task.run();
             } catch (IllegalArgumentException | NullPointerException e) {
                 System.out.println("Error due to exception: " + e.getMessage());
             }

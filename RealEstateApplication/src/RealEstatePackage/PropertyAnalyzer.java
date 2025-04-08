@@ -90,25 +90,22 @@ public class PropertyAnalyzer {
                 ));
     }
 
+    // Concept: Pattern Matching - Use instanceof pattern matching
     public Map<Boolean, List<Property>> partitionPropertiesByType() {
         return manager.getProperties().stream()
                 .collect(Collectors.partitioningBy(
-                        property -> property instanceof ResidentialProperty
+                        property -> property instanceof ResidentialProperty residential
                 ));
     }
 
     public List<String> getLimitedDistinctAddressesByPrice(int limit) {
         return manager.getProperties().stream()
-                .distinct()
-                .sorted((p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()))
-                .limit(limit)
-                .map(Property::getFullAddress)
-                .collect(Collectors.toList());
+                .distinct().sorted((p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()))
+                .limit(limit).map(Property::getFullAddress).collect(Collectors.toList());
     }
 
     public List<Property> filterPropertiesByCondition(double minPrice, PropertyStatus status) {
-        Predicate<Property> condition = property ->
-                property.getPrice() >= minPrice && property.getStatus() == status;
+        Predicate<Property> condition = property -> property.getPrice() >= minPrice && property.getStatus() == status;
 
         return manager.getProperties().stream()
                 .filter(condition)
@@ -126,13 +123,8 @@ public class PropertyAnalyzer {
         try {
             List<Callable<Double>> tasks = List.of(
                     () -> manager.getProperties().stream()
-                            .filter(p -> p instanceof ResidentialProperty)
-                            .mapToDouble(Property::getPrice)
-                            .sum(),
-                    () -> manager.getProperties().stream()
-                            .filter(p -> p instanceof CommercialProperty)
-                            .mapToDouble(Property::getPrice)
-                            .sum()
+                            .filter(p -> p instanceof ResidentialProperty).mapToDouble(Property::getPrice).sum(),
+                    () -> manager.getProperties().stream().filter(p -> p instanceof CommercialProperty).mapToDouble(Property::getPrice).sum()
             );
 
             List<Future<Double>> results = executor.invokeAll(tasks);
@@ -179,7 +171,6 @@ public class PropertyAnalyzer {
                 .max(Comparator.comparing(Property::getPrice));
     }
 
-    // Concept: Streams - Group properties by status using Collectors.groupingBy()
     public Map<PropertyStatus, List<Property>> groupPropertiesByStatus() {
         return manager.getProperties().stream()
                 .collect(Collectors.groupingBy(Property::getStatus));
