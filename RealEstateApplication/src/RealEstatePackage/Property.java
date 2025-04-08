@@ -1,70 +1,68 @@
 package RealEstatePackage;
 
-public sealed class Property implements PropertyManagement
-        permits ResidentialProperty, CommercialProperty {
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
-    private PropertyDetails PropertyDetails;
+public abstract sealed class Property implements PropertyManagement permits ResidentialProperty, CommercialProperty {
+    private PropertyDetails propertyDetails; // No longer final due to updatePrice
+    private PropertyStatus status;
 
-    public Property(String address, double price)
-    {
-        this.PropertyDetails = new PropertyDetails(address, price, PropertyStatus.AVAILABLE);
+    public Property(String address, double price) {
+        this.propertyDetails = new PropertyDetails(address, price, PropertyStatus.AVAILABLE, LocalDateTime.now());
+        this.status = PropertyStatus.AVAILABLE;
     }
 
-    public Property()
-    {
-        this("Unknown Address", 0.0);
-    }
-
+    @Override
     public void listProperty() {
-        try {
-            if (PropertyDetails.address() == null || PropertyDetails.address().isEmpty()) {
-                throw new NullPointerException("Address cannot be null or empty");
-            }
-            System.out.println("Property at " + PropertyDetails.address() + " with price: $" + PropertyDetails.price() + " [" + PropertyDetails.status() + "]");
-        } catch (NullPointerException e) {
-            System.out.println("Error at method listProperty(): " + e.getMessage());
-        }
+        System.out.println("Property listed: " + getFullDetails());
     }
 
+    @Override
     public void updatePrice(double newPrice) {
-        try {
-            if (newPrice < 0) {
-                throw new IllegalArgumentException("Price cannot be negative. Please add amount more than 0");
-            }
-            this.PropertyDetails = new PropertyDetails(PropertyDetails.address(), newPrice, PropertyDetails.status());
-            System.out.println("Updated price for address " + PropertyDetails.address() + " to $" + newPrice);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error at method updatePrice(): " + e.getMessage());
-        }
-    }
-
-    public void updateStatus(PropertyStatus newStatus) {
-        if (newStatus == null) {
-            throw new IllegalArgumentException("Status cannot be null.");
-        }
-        this.PropertyDetails = new PropertyDetails(
-                PropertyDetails.address(),
-                PropertyDetails.price(),
-                newStatus
+        // Create a new PropertyDetails with the updated price
+        this.propertyDetails = new PropertyDetails(
+                propertyDetails.address(),
+                newPrice,
+                propertyDetails.status(),
+                propertyDetails.addedDate()
         );
-        System.out.println("Status updated to " + newStatus + " for property at " + PropertyDetails.address());
     }
 
+    // Removed @Override since updateStatus is not in PropertyManagement
+    public void updateStatus(PropertyStatus newStatus) {
+        this.status = newStatus;
+    }
 
     public String getFullDetails() {
-        return "Address: " + PropertyDetails.address() + ", Price: $" + PropertyDetails.price() + ", Status: " + PropertyDetails.status();
+        return "Address: " + propertyDetails.address() +
+                ", Price: $" + propertyDetails.price() +
+                ", Status: " + status +
+                ", Added: " + propertyDetails.addedDate();
     }
 
     public String getFullAddress() {
-        return PropertyDetails.address();
+        return propertyDetails.address();
     }
 
     public double getPrice() {
-        return PropertyDetails.price();
+        return propertyDetails.price();
     }
-    public PropertyStatus getStatus()
-    {
-        return PropertyDetails.status();
+
+    public PropertyStatus getStatus() {
+        return status;
+    }
+
+    public String getFormattedPrice(Locale locale) {
+        return String.format(locale, "%,.2f", propertyDetails.price());
+    }
+
+    // Concept: Localization - Format addedDate for a specific locale
+    public String getFormattedAddedDate(Locale locale) {
+        DateTimeFormatter formatter = DateTimeFormatter
+                .ofLocalizedDateTime(java.time.format.FormatStyle.MEDIUM)
+                .withLocale(locale);
+        return propertyDetails.addedDate().format(formatter);
     }
 }
 

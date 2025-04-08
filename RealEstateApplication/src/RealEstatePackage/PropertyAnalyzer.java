@@ -1,10 +1,11 @@
 package RealEstatePackage;
 
-import java.io.IOException; // Import for IOException
-import java.nio.file.Files; // Import for Files
-import java.nio.file.Path; // Import for Path
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -155,5 +156,18 @@ public class PropertyAnalyzer {
                 .map(Property::getFullDetails)
                 .toList();
         Files.write(Path.of(filePath), propertyDetails);
+    }
+
+    // Concept: Localization - Display properties in a specific locale, including formatted date
+    public void displayPropertiesInLocale(Locale locale) {
+        System.out.println("\nDisplaying properties in locale: " + locale);
+        manager.getProperties().forEach(property -> {
+            String formattedPrice = property.getFormattedPrice(locale);
+            String formattedDate = property.getFormattedAddedDate(locale);
+            System.out.println("Address: " + property.getFullAddress() +
+                    ", Price: " + formattedPrice +
+                    ", Status: " + property.getStatus() +
+                    ", Added: " + formattedDate);
+        });
     }
 }

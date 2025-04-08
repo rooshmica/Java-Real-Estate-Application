@@ -3,6 +3,7 @@ package RealEstatePackage;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 
 public class Main {
     public static void main(String[] args)
@@ -152,11 +153,19 @@ public class Main {
             }
         };
 
+        // Action: Display properties in a specific locale
+        Runnable displayPropertiesInLocale = () -> {
+            System.out.println("\nDisplaying properties in US locale:");
+            analyzer.displayPropertiesInLocale(Locale.US);
+            System.out.println("\nDisplaying properties in French locale:");
+            analyzer.displayPropertiesInLocale(Locale.FRANCE);
+        };
+
         String[] actions = {"ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE",
                 "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES", "GET_DEFAULT_PROPERTY",
                 "PRINT_FORMATTED_PROPERTIES", "ANALYZE_PROPERTIES", "CHECK_PROPERTIES_STATUS"
                 ,"MAP_AND_PARTITION_PROPERTIES", "GET_LIMITED_DISTINCT_ADDRESSES","SORT_PROPERTIES_BY_PRICE"
-                , "CALCULATE_TOTAL_PRICE_CONCURRENTLY","SAVE_PROPERTIES_TO_FILE_NIO2"};
+                , "CALCULATE_TOTAL_PRICE_CONCURRENTLY","SAVE_PROPERTIES_TO_FILE_NIO2", "DISPLAY_PROPERTIES_IN_LOCALE"};
 
         for (var action : actions)
         {
@@ -181,6 +190,7 @@ public class Main {
                     case "SORT_PROPERTIES_BY_PRICE" -> sortPropertiesByPrice.run();
                     case "CALCULATE_TOTAL_PRICE_CONCURRENTLY" -> calculateTotalPriceConcurrently.run();
                     case "SAVE_PROPERTIES_TO_FILE_NIO2" -> savePropertiesToFileNIO2.run();
+                    case "DISPLAY_PROPERTIES_IN_LOCALE" -> displayPropertiesInLocale.run();
                     default -> System.out.println("No action: " + action);
                 }
             }
