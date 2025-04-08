@@ -15,11 +15,31 @@ public class Main {
         CommercialProperty com1 = new CommercialProperty("456 Market Rd", 500000, "Retail");
         ResidentialProperty res2 = new ResidentialProperty("789 Pine St", 350000, 4);
 
+        ResidentialProperty res3 = new ResidentialProperty("101 Oak Ave", 150000, 2);
+        ResidentialProperty res4 = new ResidentialProperty("202 Elm St", 450000, 5);
+        CommercialProperty com2 = new CommercialProperty("303 Industrial Blvd", 750000, "Warehouse");
+        CommercialProperty com3 = new CommercialProperty("404 Tech Park", 300000, "Office");
+        ResidentialProperty res5 = new ResidentialProperty("505 Cedar Ln", 200000, 3);
+        CommercialProperty com4 = new CommercialProperty("606 Commerce Dr", 600000, "Retail");
+        ResidentialProperty res6 = new ResidentialProperty("707 Birch Rd", 275000, 4);
+
+        res3.updateStatus(PropertyStatus.SOLD);
+        com2.updateStatus(PropertyStatus.SOLD);
+        res5.updateStatus(PropertyStatus.SOLD);
+        com4.updateStatus(PropertyStatus.SOLD);
+
         Runnable addProperties = () -> {
             System.out.println("\nAdded New properties:");
             manager.addProperty(res1);
             manager.addProperty(com1);
             manager.addProperty(res2);
+            manager.addProperty(res3);
+            manager.addProperty(res4);
+            manager.addProperty(com2);
+            manager.addProperty(com3);
+            manager.addProperty(res5);
+            manager.addProperty(com4);
+            manager.addProperty(res6);
         };
 
         Runnable listProperties = () -> {
