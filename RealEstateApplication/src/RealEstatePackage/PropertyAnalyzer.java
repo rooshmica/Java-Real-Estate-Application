@@ -150,7 +150,6 @@ public class PropertyAnalyzer {
         }
     }
 
-    // Concept: NIO2 - Save property details to a file
     public void savePropertiesToFile(String filePath) throws IOException {
         List<String> propertyDetails = manager.getProperties().stream()
                 .map(Property::getFullDetails)
@@ -158,7 +157,6 @@ public class PropertyAnalyzer {
         Files.write(Path.of(filePath), propertyDetails);
     }
 
-    // Concept: Localization - Display properties in a specific locale, including formatted date
     public void displayPropertiesInLocale(Locale locale) {
         System.out.println("\nDisplaying properties in locale: " + locale);
         manager.getProperties().forEach(property -> {
@@ -169,5 +167,17 @@ public class PropertyAnalyzer {
                     ", Status: " + property.getStatus() +
                     ", Added: " + formattedDate);
         });
+    }
+
+    // Concept: Streams - Use min() to find the cheapest property
+    public Optional<Property> findCheapestProperty() {
+        return manager.getProperties().stream()
+                .min(Comparator.comparing(Property::getPrice));
+    }
+
+    // Concept: Streams - Use max() to find the most expensive property
+    public Optional<Property> findMostExpensiveProperty() {
+        return manager.getProperties().stream()
+                .max(Comparator.comparing(Property::getPrice));
     }
 }

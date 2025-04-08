@@ -6,8 +6,7 @@ import java.util.Map;
 import java.util.Locale;
 
 public class Main {
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         PropertyManagement.printWelcomeMessage();
 
         PropertyManager manager = new PropertyManager();
@@ -80,10 +79,8 @@ public class Main {
             System.out.println("Default or first property: " + defaultProperty.getFullDetails());
         };
 
-        // Action: Print formatted properties using Function lambda
         Runnable printFormattedProperties = analyzer::printFormattedProperties;
 
-        // Action: Analyze properties using stream terminal operations
         Runnable analyzeProperties = () -> {
             System.out.println("\nAnalyzing properties with terminal operations:");
             System.out.println("Total properties: " + analyzer.countProperties());
@@ -93,7 +90,6 @@ public class Main {
                     analyzer.findFirstProperty().map(Property::getFullDetails).orElse("None"));
         };
 
-        // Action: Check properties status using stream terminal operations
         Runnable checkPropertiesStatus = () -> {
             System.out.println("\nChecking properties status with terminal operations:");
             System.out.println("Are all properties sold? " + analyzer.areAllPropertiesSold());
@@ -117,21 +113,18 @@ public class Main {
             });
         };
 
-        // Action: Get limited distinct addresses
         Runnable getLimitedDistinctAddresses = () -> {
             System.out.println("\nGetting limited distinct addresses (limit 2):");
             List<String> addresses = analyzer.getLimitedDistinctAddressesByPrice(2);
             addresses.forEach(System.out::println);
         };
 
-        // Action: Sort properties using Comparator.comparing()
         Runnable sortPropertiesByPrice = () -> {
             System.out.println("\nSorting properties by price using Comparator.comparing():");
             List<Property> sortedProperties = analyzer.sortPropertiesByPrice();
             sortedProperties.forEach(property -> System.out.println(property.getFullDetails()));
         };
 
-        // Action: Calculate total price concurrently using ExecutorService
         Runnable calculateTotalPriceConcurrently = () -> {
             System.out.println("\nCalculating total price concurrently using ExecutorService:");
             try {
@@ -142,7 +135,6 @@ public class Main {
             }
         };
 
-        // Action: Save properties to file using NIO2
         Runnable savePropertiesToFileNIO2 = () -> {
             System.out.println("\nSaving properties to file using NIO2:");
             try {
@@ -153,7 +145,6 @@ public class Main {
             }
         };
 
-        // Action: Display properties in a specific locale
         Runnable displayPropertiesInLocale = () -> {
             System.out.println("\nDisplaying properties in US locale:");
             analyzer.displayPropertiesInLocale(Locale.US);
@@ -161,18 +152,36 @@ public class Main {
             analyzer.displayPropertiesInLocale(Locale.FRANCE);
         };
 
-        String[] actions = {"ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE",
-                "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES", "GET_DEFAULT_PROPERTY",
-                "PRINT_FORMATTED_PROPERTIES", "ANALYZE_PROPERTIES", "CHECK_PROPERTIES_STATUS"
-                ,"MAP_AND_PARTITION_PROPERTIES", "GET_LIMITED_DISTINCT_ADDRESSES","SORT_PROPERTIES_BY_PRICE"
-                , "CALCULATE_TOTAL_PRICE_CONCURRENTLY","SAVE_PROPERTIES_TO_FILE_NIO2", "DISPLAY_PROPERTIES_IN_LOCALE"};
+        // Action: Find cheapest and most expensive properties using min() and max()
+        Runnable findCheapestAndMostExpensive = () -> {
+            System.out.println("\nFinding cheapest property using min():");
+            analyzer.findCheapestProperty()
+                    .ifPresentOrElse(
+                            property -> System.out.println("Cheapest: " + property.getFullDetails()),
+                            () -> System.out.println("No properties found.")
+                    );
 
-        for (var action : actions)
-        {
-            try
-            {
-                switch (action)
-                {
+            System.out.println("\nFinding most expensive property using max():");
+            analyzer.findMostExpensiveProperty()
+                    .ifPresentOrElse(
+                            property -> System.out.println("Most Expensive: " + property.getFullDetails()),
+                            () -> System.out.println("No properties found.")
+                    );
+        };
+
+        String[] actions = {
+                "ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE",
+                "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES",
+                "GET_DEFAULT_PROPERTY", "PRINT_FORMATTED_PROPERTIES", "ANALYZE_PROPERTIES",
+                "CHECK_PROPERTIES_STATUS", "MAP_AND_PARTITION_PROPERTIES",
+                "GET_LIMITED_DISTINCT_ADDRESSES", "SORT_PROPERTIES_BY_PRICE",
+                "CALCULATE_TOTAL_PRICE_CONCURRENTLY", "SAVE_PROPERTIES_TO_FILE_NIO2",
+                "DISPLAY_PROPERTIES_IN_LOCALE", "FIND_CHEAPEST_AND_MOST_EXPENSIVE"
+        };
+
+        for (var action : actions) {
+            try {
+                switch (action) {
                     case "ADD_PROPERTY" -> addProperties.run();
                     case "LIST_PROPERTY" -> listProperties.run();
                     case "SEARCH_BY_ADDRESS" -> searchByAddress.run();
@@ -191,11 +200,10 @@ public class Main {
                     case "CALCULATE_TOTAL_PRICE_CONCURRENTLY" -> calculateTotalPriceConcurrently.run();
                     case "SAVE_PROPERTIES_TO_FILE_NIO2" -> savePropertiesToFileNIO2.run();
                     case "DISPLAY_PROPERTIES_IN_LOCALE" -> displayPropertiesInLocale.run();
+                    case "FIND_CHEAPEST_AND_MOST_EXPENSIVE" -> findCheapestAndMostExpensive.run();
                     default -> System.out.println("No action: " + action);
                 }
-            }
-            catch (IllegalArgumentException | NullPointerException e)
-            {
+            } catch (IllegalArgumentException | NullPointerException e) {
                 System.out.println("Error due to exception: " + e.getMessage());
             }
         }
