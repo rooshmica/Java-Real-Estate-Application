@@ -16,7 +16,7 @@ public interface PropertyManagement
     private void logPriceValidation(double price) {
         System.out.println("Validating price: $" + price);
     }
-    
+
     void listProperty();
 
     void updatePrice(double newPrice);

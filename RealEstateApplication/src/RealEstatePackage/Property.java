@@ -8,6 +8,10 @@ public abstract sealed class Property implements PropertyManagement permits Resi
     private PropertyDetails propertyDetails; // No longer final due to updatePrice
     private PropertyStatus status;
 
+    public Property() {
+        this("Unknown Address", 0.0); // this() calls the parameterized constructor
+    }
+
     public Property(String address, double price) {
         this.propertyDetails = new PropertyDetails(address, price, PropertyStatus.AVAILABLE, LocalDateTime.now());
         this.status = PropertyStatus.AVAILABLE;
