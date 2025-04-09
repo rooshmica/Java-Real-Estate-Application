@@ -5,6 +5,18 @@ import java.time.format.DateTimeFormatter;
 public interface PropertyManagement
 {
 
+    default void validatePriceBeforeUpdate(double newPrice) {
+        if (newPrice < 0) {
+            logPriceValidation(newPrice);
+            throw new IllegalArgumentException("Price cannot be negative: " + newPrice);
+        }
+        logPriceValidation(newPrice);
+    }
+
+    private void logPriceValidation(double price) {
+        System.out.println("Validating price: $" + price);
+    }
+    
     void listProperty();
 
     void updatePrice(double newPrice);
