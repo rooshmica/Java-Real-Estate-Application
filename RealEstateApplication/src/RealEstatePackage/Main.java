@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Locale;
+import java.util.function.Supplier;
 
 public class Main {
     public static void main(String[] args) {
@@ -202,6 +203,13 @@ public class Main {
             System.out.println("Total properties: " + analyzer.countPropertiesWithUnnamedVariable());
         };
 
+        Runnable getDefaultPropertyFromSupplier = () -> {
+            System.out.println("\nGetting default property using Supplier:");
+            Supplier<Property> defaultPropertySupplier = () -> new ResidentialProperty("Supplier Default Address", 150000, 2);
+            Property defaultProperty = analyzer.getDefaultPropertyFromSupplier(defaultPropertySupplier);
+            System.out.println("Default or first property: " + defaultProperty.getFullDetails());
+        };
+
         String[] actions = {
                 "ADD_PROPERTY", "LIST_PROPERTY", "SEARCH_BY_ADDRESS", "SEARCH_BY_PRICE",
                 "UPDATE_PROPERTY", "UPDATE_STATUS", "REMOVE_PROPERTY", "LOG_PROPERTIES",
@@ -211,6 +219,7 @@ public class Main {
                 "CALCULATE_TOTAL_PRICE_CONCURRENTLY", "SAVE_PROPERTIES_TO_FILE_NIO2",
                 "DISPLAY_PROPERTIES_IN_LOCALE", "FIND_CHEAPEST_AND_MOST_EXPENSIVE",
                 "GROUP_PROPERTIES_BY_STATUS", "COUNT_PROPERTIES_WITH_UNNAMED_VARIABLE"
+                , "GET_DEFAULT_PROPERTY_FROM_SUPPLIER"
         };
 
         for (var action : actions) {
@@ -237,6 +246,7 @@ public class Main {
                     case "FIND_CHEAPEST_AND_MOST_EXPENSIVE" -> findCheapestAndMostExpensive;
                     case "GROUP_PROPERTIES_BY_STATUS" -> groupPropertiesByStatus;
                     case "COUNT_PROPERTIES_WITH_UNNAMED_VARIABLE" -> countPropertiesWithUnnamedVariable;
+                    case "GET_DEFAULT_PROPERTY_FROM_SUPPLIER" -> getDefaultPropertyFromSupplier;
                     default -> () -> System.out.println("No action: " + action);
                 };
                 task.run();

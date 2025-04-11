@@ -163,9 +163,7 @@ public class PropertyAnalyzer {
             String formattedPrice = property.getFormattedPrice(locale);
             String formattedDate = property.getFormattedAddedDate(locale);
             System.out.println("Address: " + property.getFullAddress() +
-                    ", Price: " + formattedPrice +
-                    ", Status: " + property.getStatus() +
-                    ", Added: " + formattedDate);
+                    ", Price: " + formattedPrice + ", Added: " + formattedDate);
         });
     }
 
@@ -186,8 +184,12 @@ public class PropertyAnalyzer {
 
     // Concept: Java 22 Unnamed Variable - Use _ when the variable is not referenced
     public long countPropertiesWithUnnamedVariable() {
-        return manager.getProperties().stream()
-                .filter(_ -> true) // _ is not referenced, just a placeholder
+        return manager.getProperties().stream().filter(_ -> true)
                 .count();
+    }
+
+    // Add this method to PropertyAnalyzer.java
+    public Property getDefaultPropertyFromSupplier(Supplier<Property> defaultPropertySupplier) {
+        return manager.getProperties().isEmpty() ? defaultPropertySupplier.get() : manager.getProperties().getFirst();
     }
 }
