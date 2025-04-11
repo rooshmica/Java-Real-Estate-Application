@@ -1,9 +1,9 @@
-Address: 123 Main St, Price: $275000.0, Status: SOLD, Added: 2025-04-11T18:57:17.485945500, Bedrooms: 3
-Address: 789 Pine St, Price: $350000.0, Status: AVAILABLE, Added: 2025-04-11T18:57:17.485945500, Bedrooms: 4
-Address: 101 Oak Ave, Price: $150000.0, Status: SOLD, Added: 2025-04-11T18:57:17.485945500, Bedrooms: 2
-Address: 202 Elm St, Price: $450000.0, Status: AVAILABLE, Added: 2025-04-11T18:57:17.485945500, Bedrooms: 5
-Address: 303 Industrial Blvd, Price: $750000.0, Status: SOLD, Added: 2025-04-11T18:57:17.485945500, Business Type: Warehouse
-Address: 404 Tech Park, Price: $300000.0, Status: AVAILABLE, Added: 2025-04-11T18:57:17.485945500, Business Type: Office
-Address: 505 Cedar Ln, Price: $200000.0, Status: SOLD, Added: 2025-04-11T18:57:17.485945500, Bedrooms: 3
-Address: 606 Commerce Dr, Price: $600000.0, Status: SOLD, Added: 2025-04-11T18:57:17.485945500, Business Type: Retail
-Address: 707 Birch Rd, Price: $275000.0, Status: AVAILABLE, Added: 2025-04-11T18:57:17.485945500, Bedrooms: 4
+Address: 123 Main St, Price: $275000.0, Status: SOLD, Added: 2025-04-11T19:49:39.957033700, Bedrooms: 3
+Address: 789 Pine St, Price: $350000.0, Status: AVAILABLE, Added: 2025-04-11T19:49:39.957033700, Bedrooms: 4
+Address: 101 Oak Ave, Price: $150000.0, Status: SOLD, Added: 2025-04-11T19:49:39.957033700, Bedrooms: 2
+Address: 202 Elm St, Price: $450000.0, Status: AVAILABLE, Added: 2025-04-11T19:49:39.957033700, Bedrooms: 5
+Address: 303 Industrial Blvd, Price: $750000.0, Status: SOLD, Added: 2025-04-11T19:49:39.957033700, Business Type: Warehouse
+Address: 404 Tech Park, Price: $300000.0, Status: AVAILABLE, Added: 2025-04-11T19:49:39.957033700, Business Type: Office
+Address: 505 Cedar Ln, Price: $200000.0, Status: SOLD, Added: 2025-04-11T19:49:39.957033700, Bedrooms: 3
+Address: 606 Commerce Dr, Price: $600000.0, Status: SOLD, Added: 2025-04-11T19:49:39.957033700, Business Type: Retail
+Address: 707 Birch Rd, Price: $275000.0, Status: AVAILABLE, Added: 2025-04-11T19:49:39.958270800, Bedrooms: 4

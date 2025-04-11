@@ -9,14 +9,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class PropertyAnalyzer {
@@ -31,7 +32,6 @@ public class PropertyAnalyzer {
                 System.out.println("LOG: [Address: " + property.getFullAddress() +
                         ", Price: $" + property.getPrice() +
                         ", Status: " + property.getStatus() + "]");
-
         System.out.println("\nLogging all properties with Consumer:");
         manager.getProperties().forEach(propertyLogger);
     }
@@ -47,7 +47,6 @@ public class PropertyAnalyzer {
     public void printFormattedProperties() {
         Function<Property, String> propertyFormatter = property ->
                 "Formatted: " + property.getFullAddress() + " - $" + property.getPrice();
-
         System.out.println("\nFormatted properties using Function:");
         manager.getProperties().stream()
                 .map(propertyFormatter)
@@ -109,7 +108,6 @@ public class PropertyAnalyzer {
     public List<Property> filterPropertiesByCondition(double minPrice, PropertyStatus status) {
         Predicate<Property> condition = property ->
                 property.getPrice() >= minPrice && property.getStatus() == status;
-
         return manager.getProperties().stream()
                 .filter(condition)
                 .collect(Collectors.toList());
@@ -134,7 +132,6 @@ public class PropertyAnalyzer {
                             .mapToDouble(Property::getPrice)
                             .sum()
             );
-
             List<Future<Double>> results = executor.invokeAll(tasks);
             return results.stream()
                     .mapToDouble(future -> {
@@ -158,12 +155,13 @@ public class PropertyAnalyzer {
     }
 
     public void displayPropertiesInLocale(Locale locale) {
-        System.out.println("\nDisplaying properties in locale: " + locale);
+        ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
+        System.out.println("\n" + messages.getString("display.header") + " " + locale);
         manager.getProperties().forEach(property -> {
-            String formattedPrice = property.getFormattedPrice(locale);
-            String formattedDate = property.getFormattedAddedDate(locale);
-            System.out.println("Address: " + property.getFullAddress() +
-                    ", Price: " + formattedPrice + ", Added: " + formattedDate);
+            System.out.println(messages.getString("display.address") + ": " + property.getFormattedAddress(locale) +
+                    ", " + messages.getString("display.price") + ": " + property.getFormattedPrice(locale) +
+                    ", " + messages.getString("display.status") + ": " + property.getLocalizedStatus(locale) +
+                    ", " + messages.getString("display.added") + ": " + property.getFormattedAddedDate(locale));
         });
     }
 
@@ -182,13 +180,43 @@ public class PropertyAnalyzer {
                 .collect(Collectors.groupingBy(Property::getStatus));
     }
 
-    // Concept: Java 22 Unnamed Variable - Use _ when the variable is not referenced
+    // Java 22 Unnamed Variable: Use _ when the variable is not referenced
     public long countPropertiesWithUnnamedVariable() {
-        return manager.getProperties().stream().filter(_ -> true)
+        return manager.getProperties().stream()
+                .filter(_ -> true)
                 .count();
     }
 
-    // Add this method to PropertyAnalyzer.java
+    // Java 22 Unnamed Variable in a loop
+    public void printFormattedPropertiesWithUnnamedVariable() {
+        System.out.println("\nPrinting formatted properties using unnamed variable in loop:");
+        for (Property _ : manager.getProperties()) {
+            System.out.println("Processing a property...");
+        }
+    }
+
+    // Java 22 Unnamed Pattern in instanceof
+    public void logPropertyType(Property property) {
+        System.out.println("\nLogging property type using unnamed pattern in instanceof:");
+        if (property instanceof ResidentialProperty _) {
+            System.out.println("This is a residential property.");
+        } else if (property instanceof CommercialProperty _) {
+            System.out.println("This is a commercial property.");
+        } else {
+            System.out.println("Unknown property type.");
+        }
+    }
+
+    // Java 22 Unnamed Pattern in switch
+    public String describePropertyType(Property property) {
+        return switch (property) {
+            case ResidentialProperty _ -> "Residential Property";
+            case CommercialProperty _ -> "Commercial Property";
+            default -> "Unknown Property Type";
+        };
+    }
+
+    // Supplier: Lazily provide a default property
     public Property getDefaultPropertyFromSupplier(Supplier<Property> defaultPropertySupplier) {
         return manager.getProperties().isEmpty() ? defaultPropertySupplier.get() : manager.getProperties().getFirst();
     }

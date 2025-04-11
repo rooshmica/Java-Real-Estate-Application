@@ -2,8 +2,8 @@ package RealEstatePackage;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Locale;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class Main {
@@ -203,6 +203,24 @@ public class Main {
             System.out.println("Total properties: " + analyzer.countPropertiesWithUnnamedVariable());
         };
 
+        Runnable printFormattedPropertiesWithUnnamedVariable = () -> analyzer.printFormattedPropertiesWithUnnamedVariable();
+
+        Runnable logPropertyType = () -> {
+            System.out.println("\nLogging property type for first property using unnamed pattern in instanceof:");
+            Property property = manager.searchProperty("123 Main St");
+            if (property != null) {
+                analyzer.logPropertyType(property);
+            }
+        };
+
+        Runnable describePropertyType = () -> {
+            System.out.println("\nDescribing property type for first property using unnamed pattern in switch:");
+            Property property = manager.searchProperty("123 Main St");
+            if (property != null) {
+                System.out.println("Type: " + analyzer.describePropertyType(property));
+            }
+        };
+
         Runnable getDefaultPropertyFromSupplier = () -> {
             System.out.println("\nGetting default property using Supplier:");
             Supplier<Property> defaultPropertySupplier = () -> new ResidentialProperty("Supplier Default Address", 150000, 2);
@@ -218,8 +236,9 @@ public class Main {
                 "GET_LIMITED_DISTINCT_ADDRESSES", "SORT_PROPERTIES_BY_PRICE",
                 "CALCULATE_TOTAL_PRICE_CONCURRENTLY", "SAVE_PROPERTIES_TO_FILE_NIO2",
                 "DISPLAY_PROPERTIES_IN_LOCALE", "FIND_CHEAPEST_AND_MOST_EXPENSIVE",
-                "GROUP_PROPERTIES_BY_STATUS", "COUNT_PROPERTIES_WITH_UNNAMED_VARIABLE"
-                , "GET_DEFAULT_PROPERTY_FROM_SUPPLIER"
+                "GROUP_PROPERTIES_BY_STATUS", "COUNT_PROPERTIES_WITH_UNNAMED_VARIABLE",
+                "PRINT_FORMATTED_PROPERTIES_WITH_UNNAMED_VARIABLE", "LOG_PROPERTY_TYPE",
+                "DESCRIBE_PROPERTY_TYPE", "GET_DEFAULT_PROPERTY_FROM_SUPPLIER"
         };
 
         for (var action : actions) {
@@ -246,6 +265,9 @@ public class Main {
                     case "FIND_CHEAPEST_AND_MOST_EXPENSIVE" -> findCheapestAndMostExpensive;
                     case "GROUP_PROPERTIES_BY_STATUS" -> groupPropertiesByStatus;
                     case "COUNT_PROPERTIES_WITH_UNNAMED_VARIABLE" -> countPropertiesWithUnnamedVariable;
+                    case "PRINT_FORMATTED_PROPERTIES_WITH_UNNAMED_VARIABLE" -> printFormattedPropertiesWithUnnamedVariable;
+                    case "LOG_PROPERTY_TYPE" -> logPropertyType;
+                    case "DESCRIBE_PROPERTY_TYPE" -> describePropertyType;
                     case "GET_DEFAULT_PROPERTY_FROM_SUPPLIER" -> getDefaultPropertyFromSupplier;
                     default -> () -> System.out.println("No action: " + action);
                 };

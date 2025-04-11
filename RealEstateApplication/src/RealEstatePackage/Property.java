@@ -3,16 +3,19 @@ package RealEstatePackage;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.ResourceBundle;
+import java.text.NumberFormat;
 
 public abstract sealed class Property implements PropertyManagement permits ResidentialProperty, CommercialProperty {
     private PropertyDetails propertyDetails; // No longer final due to updatePrice
     private PropertyStatus status;
 
     public Property() {
-        this("Unknown Address", 0.0); // this() calls the parameterized constructor
+        this("Unknown Address", 0.0);
     }
 
     public Property(String address, double price) {
+        validatePriceBeforeUpdate(price); // Use the default method from PropertyManagement
         this.propertyDetails = new PropertyDetails(address, price, PropertyStatus.AVAILABLE, LocalDateTime.now());
         this.status = PropertyStatus.AVAILABLE;
     }
@@ -24,7 +27,7 @@ public abstract sealed class Property implements PropertyManagement permits Resi
 
     @Override
     public void updatePrice(double newPrice) {
-        // Create a new PropertyDetails with the updated price
+        validatePriceBeforeUpdate(newPrice); // Use the default method from PropertyManagement
         this.propertyDetails = new PropertyDetails(
                 propertyDetails.address(),
                 newPrice,
@@ -33,7 +36,6 @@ public abstract sealed class Property implements PropertyManagement permits Resi
         );
     }
 
-    // Removed @Override since updateStatus is not in PropertyManagement
     public void updateStatus(PropertyStatus newStatus) {
         this.status = newStatus;
     }
@@ -57,23 +59,34 @@ public abstract sealed class Property implements PropertyManagement permits Resi
         return status;
     }
 
-    public String getFormattedPrice(Locale locale) {
-        return String.format(locale, "%,.2f", propertyDetails.price());
+    // Localization: Format and translate address
+    public String getFormattedAddress(Locale locale) {
+        ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
+        String streetLabel = messages.getString("address.street");
+        return propertyDetails.address() + " " + streetLabel;
     }
 
-    // Concept: Localization - Format addedDate for a specific locale
+    // Localization: Format price
+    public String getFormattedPrice(Locale locale) {
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+        return currencyFormatter.format(propertyDetails.price());
+    }
+
+    // Localization: Translate status
+    public String getLocalizedStatus(Locale locale) {
+        ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
+        String statusKey = "status." + status.name().toLowerCase();
+        return messages.getString(statusKey);
+    }
+
+    // Localization: Format datetime
     public String getFormattedAddedDate(Locale locale) {
-        DateTimeFormatter formatter = DateTimeFormatter
-                .ofLocalizedDateTime(java.time.format.FormatStyle.MEDIUM)
-                .withLocale(locale);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm", locale);
         return propertyDetails.addedDate().format(formatter);
     }
 }
 
-
-final class ResidentialProperty extends Property
-{
-
+final class ResidentialProperty extends Property {
     private final int bedrooms;
 
     ResidentialProperty(String address, double price, int bedrooms) {
@@ -82,61 +95,45 @@ final class ResidentialProperty extends Property
     }
 
     @Override
-    public void listProperty()
-    {
-        try
-        {
-            if (super.getFullAddress() == null)
-            {
+    public void listProperty() {
+        try {
+            if (super.getFullAddress() == null) {
                 throw new NullPointerException("Residential Property address cannot be null");
             }
             System.out.println("Residential property at " + super.getFullAddress() + " with " + bedrooms + " bedrooms, priced at $" + super.getPrice() + " [" + super.getStatus() + "]");
-        }
-        catch (NullPointerException e)
-        {
+        } catch (NullPointerException e) {
             System.out.println("Error at method listProperty(): " + e.getMessage());
         }
     }
 
-     @Override
-     public String getFullDetails()
-     {
-         return super.getFullDetails() + ", Bedrooms: " + bedrooms;
-     }
+    @Override
+    public String getFullDetails() {
+        return super.getFullDetails() + ", Bedrooms: " + bedrooms;
+    }
 }
 
-final class CommercialProperty extends Property
- {
-
+final class CommercialProperty extends Property {
     private final String businessType;
 
-    CommercialProperty(String address, double price, String businessType)
-    {
+    CommercialProperty(String address, double price, String businessType) {
         super(address, price);
         this.businessType = businessType;
     }
 
-     @Override
-     public void listProperty()
-     {
-         try
-         {
-             if (super.getFullAddress() == null)
-             {
-                 throw new NullPointerException("Commercial Property address cannot be null");
-             }
-             System.out.println("Commercial property for " + businessType + " business at " + super.getFullAddress() + ", priced at $" + super.getPrice() + " [" + super.getStatus() + "]");
-         }
-         catch (NullPointerException e)
-         {
-             System.out.println("Error at method listProperty(): " + e.getMessage());
-         }
-     }
+    @Override
+    public void listProperty() {
+        try {
+            if (super.getFullAddress() == null) {
+                throw new NullPointerException("Commercial Property address cannot be null");
+            }
+            System.out.println("Commercial property for " + businessType + " business at " + super.getFullAddress() + ", priced at $" + super.getPrice() + " [" + super.getStatus() + "]");
+        } catch (NullPointerException e) {
+            System.out.println("Error at method listProperty(): " + e.getMessage());
+        }
+    }
 
-     @Override
-     public String getFullDetails()
-     {
-         return super.getFullDetails() + ", Business Type: " + businessType;
-     }
-
- }
+    @Override
+    public String getFullDetails() {
+        return super.getFullDetails() + ", Business Type: " + businessType;
+    }
+}
