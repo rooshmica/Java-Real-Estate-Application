@@ -154,7 +154,19 @@ public class PropertyAnalyzer {
         Files.write(Path.of(filePath), propertyDetails);
     }
 
+   /* public void displayPropertiesInLocale(Locale locale) {
+        ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
+        System.out.println("\n" + messages.getString("display.header") + " " + locale);
+        manager.getProperties().forEach(property -> {
+            System.out.println(messages.getString("display.address") + ": " + property.getFormattedAddress(locale) +
+                    ", " + messages.getString("display.price") + ": " + property.getFormattedPrice(locale) +
+                    ", " + messages.getString("display.status") + ": " + property.getLocalizedStatus(locale) +
+                    ", " + messages.getString("display.added") + ": " + property.getFormattedAddedDate(locale));
+        });
+    }*/
+
     public void displayPropertiesInLocale(Locale locale) {
+        // Use the fully qualified path to the resource bundle
         ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
         System.out.println("\n" + messages.getString("display.header") + " " + locale);
         manager.getProperties().forEach(property -> {
