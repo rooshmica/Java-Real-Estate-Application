@@ -36,12 +36,16 @@ public class PropertyAnalyzer {
         manager.getProperties().forEach(propertyLogger);
     }
 
-    public Property getDefaultPropertyIfEmpty() {
-        try {
-            return manager.getProperties().getFirst();
-        } catch (NoSuchElementException e) {
-            return new ResidentialProperty("Default Address", 100000, 2);
-        }
+    public List<Property> filterPropertiesByCondition(double minPrice, PropertyStatus status) {
+        Predicate<Property> condition = property ->
+                property.getPrice() >= minPrice && property.getStatus() == status;
+        return manager.getProperties().stream()
+                .filter(condition)
+                .collect(Collectors.toList());
+    }
+
+    public Property getDefaultPropertyFromSupplier(Supplier<Property> defaultPropertySupplier) {
+        return manager.getProperties().isEmpty() ? defaultPropertySupplier.get() : manager.getProperties().getFirst();
     }
 
     public void printFormattedProperties() {
@@ -53,31 +57,18 @@ public class PropertyAnalyzer {
                 .forEach(System.out::println);
     }
 
-    public long countProperties() {
-        return manager.getProperties().size();
+    public Property getDefaultPropertyIfEmpty() {
+        try {
+            return manager.getProperties().getFirst();
+        } catch (NoSuchElementException e) {
+            return new ResidentialProperty("Default Address", 100000, 2);
+        }
     }
 
-    public Optional<Property> findAnyProperty() {
-        return manager.getProperties().stream().findAny();
-    }
 
-    public Optional<Property> findFirstProperty() {
-        return manager.getProperties().stream().findFirst();
-    }
-
-    public boolean areAllPropertiesSold() {
+    public Map<PropertyStatus, List<Property>> groupPropertiesByStatus() {
         return manager.getProperties().stream()
-                .allMatch(property -> property.getStatus() == PropertyStatus.SOLD);
-    }
-
-    public boolean isAnyPropertyAvailable() {
-        return manager.getProperties().stream()
-                .anyMatch(property -> property.getStatus() == PropertyStatus.AVAILABLE);
-    }
-
-    public boolean areNoPropertiesBelowPrice(double price) {
-        return manager.getProperties().stream()
-                .noneMatch(property -> property.getPrice() < price);
+                .collect(Collectors.groupingBy(Property::getStatus));
     }
 
     public Map<String, Property> mapPropertiesByAddress() {
@@ -105,13 +96,7 @@ public class PropertyAnalyzer {
                 .collect(Collectors.toList());
     }
 
-    public List<Property> filterPropertiesByCondition(double minPrice, PropertyStatus status) {
-        Predicate<Property> condition = property ->
-                property.getPrice() >= minPrice && property.getStatus() == status;
-        return manager.getProperties().stream()
-                .filter(condition)
-                .collect(Collectors.toList());
-    }
+
 
     public List<Property> sortPropertiesByPrice() {
         return manager.getProperties().stream()
@@ -187,16 +172,35 @@ public class PropertyAnalyzer {
                 .max(Comparator.comparing(Property::getPrice));
     }
 
-    public Map<PropertyStatus, List<Property>> groupPropertiesByStatus() {
-        return manager.getProperties().stream()
-                .collect(Collectors.groupingBy(Property::getStatus));
+    public long countPropertiesWithUnnamedVariable() {
+        return manager.getProperties().stream() .filter(_ -> true).count();
     }
 
-    // Java 22 Unnamed Variable: Use _ when the variable is not referenced
-    public long countPropertiesWithUnnamedVariable() {
+    public long countProperties() {
+        return manager.getProperties().size();
+    }
+
+    public Optional<Property> findAnyProperty() {
+        return manager.getProperties().stream().findAny();
+    }
+
+    public Optional<Property> findFirstProperty() {
+        return manager.getProperties().stream().findFirst();
+    }
+
+    public boolean areAllPropertiesSold() {
         return manager.getProperties().stream()
-                .filter(_ -> true)
-                .count();
+                .allMatch(property -> property.getStatus() == PropertyStatus.SOLD);
+    }
+
+    public boolean isAnyPropertyAvailable() {
+        return manager.getProperties().stream()
+                .anyMatch(property -> property.getStatus() == PropertyStatus.AVAILABLE);
+    }
+
+    public boolean areNoPropertiesBelowPrice(double price) {
+        return manager.getProperties().stream()
+                .noneMatch(property -> property.getPrice() < price);
     }
 
     // Java 22 Unnamed Variable in a loop
@@ -207,7 +211,6 @@ public class PropertyAnalyzer {
         }
     }
 
-    // Java 22 Unnamed Pattern in instanceof
     public void logPropertyType(Property property) {
         System.out.println("\nLogging property type using unnamed pattern in instanceof:");
         if (property instanceof ResidentialProperty _) {
@@ -219,7 +222,6 @@ public class PropertyAnalyzer {
         }
     }
 
-    // Java 22 Unnamed Pattern in switch
     public String describePropertyType(Property property) {
         return switch (property) {
             case ResidentialProperty _ -> "Residential Property";
@@ -228,8 +230,5 @@ public class PropertyAnalyzer {
         };
     }
 
-    // Supplier: Lazily provide a default property
-    public Property getDefaultPropertyFromSupplier(Supplier<Property> defaultPropertySupplier) {
-        return manager.getProperties().isEmpty() ? defaultPropertySupplier.get() : manager.getProperties().getFirst();
-    }
+
 }
